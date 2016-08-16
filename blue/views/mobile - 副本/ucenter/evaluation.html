@@ -1,0 +1,45 @@
+{set:$queryEvaluationList = Api::run('getUcenterEvaluation',$this->user['user_id'])}
+{set:$items = $queryEvaluationList->find()}
+<section>
+<div class="pending-detial">
+    <div class="panel-heading">
+        <h3 class="panel-title">商品评价</h3>
+    </div>
+    {if:$items}
+    {foreach:items = $items}
+    <table class="table table-bordered table-hover">
+        <tbody>
+            <tr>
+                <td>订单号</td>
+                <td>{$item['order_no']}</td>
+            </tr>
+            <tr>
+                <td>商品名称</td>
+                <td><a href="{url:/site/products/id/$item[goods_id]}" target='_block'>{$item['name']}</a></td>
+            </tr>
+            <tr>
+                <td>下单时间</td>
+                <td>{$item['time']}</td>
+            </tr>
+            {if:$item['status'] == 0}
+            <tr>
+                <td>操作</td>
+                <td class="form"><input  style="margin-top:0" type='button' class="btn" onclick="window.location.href='{url:/site/comments/id/$item[id]}'" value="发表评价" /></td>
+            </tr>
+            {else:}
+            <tr>
+                <td>评论内容</td>
+                <td>{$item['contents']}</td>
+            </tr>
+            {/if}
+        </tbody>
+    </table>
+    {/foreach}
+    {$queryEvaluationList->getPageBar()}
+    {else:}
+    <ul>
+        <li class="text-center">当前暂无数据</li>
+    </ul>
+    {/if}
+</div>
+</section>

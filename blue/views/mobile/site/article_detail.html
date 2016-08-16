@@ -1,0 +1,31 @@
+{set:
+	$seo_data=array();
+	$site_config=new Config('site_config');
+	$seo_data['title']=$this->articleRow['title'];
+	$seo_data['title'].="_".$site_config->name;
+	$seo_data['keywords']=$this->articleRow['keywords'];
+	$seo_data['description']=$this->articleRow['description'];
+	seo::set($seo_data);
+}
+<style type="text/css">
+* { letter-spacing: 0px; } .wrapper { margin: 0 10px; background-color: #fff; padding: 10px 10px; } h2 { font-size: 20px; font-weight: 600; line-height: 24px; padding: 15px 0 10px; } .prot { color: #777; font-size: 12px; line-height: 20px; } p { font-size: 18px; color: #1a1a1a; line-height: 31px; }
+</style>
+<div class="wrapper clearfix container_2 yui3-g-r">
+    <div class="main f_r">
+        <div class="box m_10">
+            <div class="cont">
+                <div class="c_box">
+                    <h2>{$this->articleRow['title']}</h2>
+                    <div class="partake_bar clearfix prot">
+                        <span class="f_r"></span>发布日期：{$this->articleRow['create_time']}
+                    </div>
+                    <hr class="m_10" />
+                    <div class="textcontent">
+                        <p>{$this->articleRow['content']}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

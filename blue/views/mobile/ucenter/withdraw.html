@@ -1,0 +1,74 @@
+{set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+{set:$user_id = $this->user['user_id']}
+{set:$queryWithdrawList = Api::run('getWithdrawList',$user_id)}
+{set:$items = $queryWithdrawList->find()}
+<section>
+<div class="pending-detial">
+    <div class="panel-heading">
+        <h3 class="panel-title">账户余额：￥<strong>{$this->memberRow['balance']}</strong></h3>
+    </div>
+
+	{if:$items}
+    {foreach:items = $items}
+    <table class="table table-bordered table-hover">
+        <tbody>
+            <tr>
+                <td>会员备注</td>
+                <td>{$item['note']}</td>
+            </tr>
+            <tr>
+                <td>管理员备注</td>
+                <td>{$item['re_note']}</td>
+            </tr>
+            <tr>
+                <td>金额</td>
+                <td>{$item['amount']} 元</td>
+            </tr>
+            <tr>
+                <td>申请时间</td>
+                <td>{$item['time']}</td>
+            </tr>
+            <tr>
+                <td>状态</td>
+                <td>
+                	{echo:AccountLog::getWithdrawStatus($item['status'])}
+
+                    {if:$item['status']==0}
+                    <input type="button" class="btn" value="取消" onclick="delModel({link:'{url:/ucenter/withdraw_del/id/$item[id]}'});" />
+                    {/if}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    {/foreach}
+
+    {$queryWithdrawList->getPageBar()}
+    {/if}
+
+	<form action="{url:/ucenter/withdraw_act}" method="POST">
+    <table class="table table-bordered table-hover">
+        <tbody>
+            <tr>
+                <td><input type="text" name='name' class="form-control" placeholder="收款人姓名" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name='amount' class="form-control" placeholder="提现金额" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name='note' class="form-control" placeholder="备注信息" /></td>
+            </tr>
+            <tr><td><button type="submit" class="btn btn-primary">提交提现申请</button></td></tr>
+        </tbody>
+    </table>
+    </form>
+</div>
+</section>
+
+<script type='text/javascript'>
+var formObj = new Form();
+formObj.init({
+	'name':'{$this->withdrawRow['name']}',
+	'note':'{$this->withdrawRow['note']}',
+	'amount':'{$this->withdrawRow['amount']}'
+});
+</script>

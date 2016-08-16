@@ -1,0 +1,55 @@
+{set:
+	$site_config=new Config('site_config');
+	$seo_data=array();
+	$seo_data['title']=$site_config->name;
+	$seo_data['title'].=$site_config->index_seo_title;
+	$seo_data['keywords']=$site_config->index_seo_keywords;
+	$seo_data['description']=$site_config->index_seo_description;
+	seo::set($seo_data);
+}
+<link rel="stylesheet" href="{skin:css/index.css}" type="text/css">
+
+<!--幻灯片 开始-->
+{echo:Ad::show("首页幻灯片510*220(mobile)")}
+<!--幻灯片 结束-->
+
+{echo:Ad::show("首页顶部通栏510*120(mobile)")}
+    <div class="" style="margin: 4%;"><a href="###"><img src="{skin:images/1.png}" style="width: 92vw;
+  height: calc(92 * 0.57vw);"></a></div>
+<!--首页推荐商品列表 开始-->
+<div id="list">
+    <div class="kros_t"><p>商品推荐</p></div>
+        <div class="list">
+            {foreach:items = Api::run('getCommendRecom')}
+            <div class="listview">
+                <div class="">
+                    <a href="{url:/site/products/id/$item[id]}"><img title="{$item['name']}" src="{url:$item[img]}" /></a>
+                    <div class="caption">
+                    </div>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+    <div class="null-l"></div>
+<!--首页推荐商品列表 结束-->
+<!--热卖商品-->
+        <div id="list">
+            <div class="kros_t"><p>热卖商品</p></div>
+            <div class="list">
+                    {foreach:items=Api::run('getCommendHot',8)}
+                    {set:$tmpId=$item['id']}
+                    <div class="listview">
+                        <a href="{url:/site/products/id/$item[id]}"><img title="{$item['name']}" src="{url:$item[img]}" /></a>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+        <!--热卖商品-->
+{echo:Ad::show("首页中部通栏510*200(mobile)")}
+<script type="text/javascript">
+$(function()
+{
+    $(".headline").text('首页');
+})
+</script>

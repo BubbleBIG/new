@@ -1,0 +1,26 @@
+{set:$comment_total=$this->data['comment_total'];}
+{set:$average_point=$this->data['average_point'];}
+{set:$id=intval(IReq::get('id'));}
+{set:$item=Api::run('getGoodsInfo',array("#id#",$id))}
+<div class="pending-detial">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">商品评论</h3>
+        </div>
+        {foreach:items=$this->data['comment_list'] key=$key item=$item}
+        <ul class="list-group">
+            <li class="list-group-item ">
+                <p class="head"><div>用户名：{$item['username']}</div><m align='right'>{$item['comment_time']}</m></p>
+                <p class="head">评分数：{$item['point']} 分</p>
+                <p class="head">内容：{$item['contents']}</p>
+                <p class="head">购买时间：{$item['time']}</p>
+            </li>
+        </ul>
+        {/foreach}
+    </div>
+    <ul>
+        {if:$this->data['comment_list']} {$this->comment_query->getPageBar()} {else:}
+        <li class="text-center" style="line-height:150px">暂无数据</li>
+        {/if}
+    </ul>
+</div>

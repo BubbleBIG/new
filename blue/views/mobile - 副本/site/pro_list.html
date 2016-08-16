@@ -1,0 +1,114 @@
+{set:$seo_data=array(); $site_config=new Config('site_config');}
+{set:$seo_data['title'] = $this->catRow['title']?$this->catRow['title']:$this->catRow['name']}
+{set:$seo_data['title'].="_".$site_config->name}
+{set:$seo_data['keywords']=$this->catRow['keywords']}
+{set:$seo_data['description']=$this->catRow['descript']}
+{set:seo::set($seo_data);}
+<script type="text/javascript">
+$(function()
+{
+    $(".headline").text('{$this->catRow["name"]}');
+})
+</script>
+<!-- <header>
+        <div class="header">
+        {if:IWeb::$app->getController()->getId() == 'site' && IWeb::$app->getController()->getAction()->getId() == 'index'}
+            <a id="kros_user" class="icon iconfont back" href="javascript:void(0)" ><i class="" style=""><img src="{skin:images/back.png}"></i></a>
+        {else:}
+            <a id="kros_user" class="icon iconfont back" href="javascript:void(0)" onclick="window.history.back();" title="返回"><img src="{skin:images/back.png}"></a>
+        {/if}
+
+        {if:IWeb::$app->getController()->getId() == 'site' && IWeb::$app->getController()->getAction()->getId() == 'products'}
+        <span class="headline">{$this->catRow['name']}</span>
+        <a id="kros_user" class="icon iconfont search" href="{url:/}" ><i class="" style=""><img src="{skin:images/search.png}"></i></a>
+
+        {else:}
+            <span class="headline">{$this->catRow['name']}</span>
+            <a class="icon iconfont search " href="javascript:void(0)" onclick="$('.kros_search').toggle();" title="搜索商品"><img src="{skin:images/search.png}"></a>
+        {/if}
+
+        </div>
+    </header> -->
+<section class="container-full">
+   <!--  <div class="label" style="margin:0">
+        <a class="label1" href="javascript:void(0)"><i class="on"></i>{$this->catRow['name']}</a>
+    </div> -->
+    <div class="row" style="margin-top: 8px;font-weight: bold;">
+        {foreach:items=search_goods::getOrderType()} {set:$next = search_goods::getOrderValue($key)}
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 text-center sel" onclick="window.location.href='{echo:search_goods::searchUrl('order',$next)}';" style="height: 26px;border-bottom: 1px solid #ffe">
+            {$item}
+        </div>
+        {/foreach}
+    </div>
+    {set:$goodsObj = search_goods::find(array('category_extend' => $this->childId));$resultData = $goodsObj->find()} {if:$resultData} {foreach:items=$resultData}
+    <div class="pro_list border-bottom">
+        <div class="col-xs-4" style="width: 38%">
+            <a href="{url:/site/products/id/$item[id]}"><img src="{url:$item[img]}" class="img-responsive" alt="" style="width: 100vw;height: calc(100 * 0.22vw)"></a>
+        </div>
+        <div class="col-xs-8" style="width: 58%;padding: 0;font-size: 1.4rem;font-weight: bold;">
+          <em style="margin-top:0"><a href="{url:/site/products/id/$item[id]}" style="font-size: 1.4rem">{$item['name']}</a></em>
+            <div style="margin-top:20px">
+                <span class="red" style="font-size: 1.4rem">￥{$item['sell_price']}</span>
+                <span style="float:right;font-size:1.4rem;margin-right:0;text-decoration:line-through">￥{$item['market_price']}</span>
+            </div>
+        </div>
+    </div>
+    {/foreach} {$goodsObj->getPageBar()} {else:}
+    <div class="text-center" style="line-height:150px">对不起，没有找到相关商品</div>
+    {/if}
+</section>
+<script  type="text/javascript">
+
+(function($) {
+$.extend({
+urlGet:function()
+{
+    var aQuery = window.location.href.split("?");  //取得Get参数
+    var aGET = new Array();
+    if(aQuery.length > 1)
+    {
+        var aBuf = aQuery[1].split("&");
+        for(var i=0, iLoop = aBuf.length; i<iLoop; i++)
+        {
+            var aTmp = aBuf[i].split("=");  //分离key与Value
+            aGET[aTmp[0]] = aTmp[1];
+        }
+     }
+     return aGET;
+ }
+})
+})(jQuery);
+
+
+ $(function(){
+
+var GET = $.urlGet();
+
+var GetOrder=(GET['order'])?GET['order']:'sale';
+
+if (GetOrder.indexOf("sale")>-1)
+  {
+$(".sel:eq(0)").css("border-bottom","2px solid #FF4F15");
+  }
+else if (GetOrder.indexOf("cpoint")>-1)
+  {
+$(".sel:eq(1)").css("border-bottom","2px solid #FF4F15");
+  }
+  else if (GetOrder.indexOf("price")>-1)
+  {
+$(".sel:eq(2)").css("border-bottom","2px solid #FF4F15");
+  }
+else
+  {
+$(".sel:eq(3)").css("border-bottom","2px solid #FF4F15");
+  }
+
+	     })
+</script>
+
+
+
+
+
+
+

@@ -1,0 +1,75 @@
+{js:kindeditor}
+<section>
+<div class="pending-detial">
+	<div class="panel-heading">
+	    <h3 class="panel-title">退款详情</h3>
+	</div>
+
+    <form action="{url:/ucenter/refunds_update}" method="post" callback="checkForm();">
+    <input type="hidden" name="order_id" value="{$this->orderRow['id']}" />
+	<table class="table table-bordered table-hover">
+		<colgroup>
+			<col width="80px" />
+			<col  />
+		</colgroup>
+		<tbody>
+			<tr>
+				<td>订单编号</td>
+				<td>{$this->orderRow['order_no']}</td>
+			</tr>
+
+			<tr>
+				<td>退款商品</td>
+				<td>
+					{foreach:items=Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$this->orderRow['id'])) item=$good} {set:$good_info = JSON::decode($good['goods_array'])} {if:$good['is_send'] != 2}
+					<label class="col-sm-8">
+					<input type="checkbox" name="order_goods_id[]" class="option-input radio" style="position:relative"  value="{$good['id']}" />
+					<a class="blue" href="{url:/site/products/id/$good['goods_id']}" target='_blank'>{$good_info['name']}{if:$good_info['value']}{$good_info['value']}{/if} X {$good['goods_nums']}件</a>
+					</label>
+					{/if}
+					{/foreach}
+				</td>
+			</tr>
+
+			<tr>
+				<td>退款理由</td>
+				<td><textarea name="content" id="content" style="width:85%;height:300px" pattern="required"></textarea></td>
+			</tr>
+		</tbody>
+	</table>
+
+    <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" class="btn  btn-block" style="width:95%">提交退款</button>
+        </div>
+    </div>
+    </form>
+</div>
+</section>
+<script type="text/javascript">
+//编辑器载入
+KindEditorObj = KindEditor.create('#content',
+{
+	items : [
+		'fontsize', '|', 'forecolor','bold', 'italic', 'underline',
+		'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+		'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+});
+
+//提交表单检查
+function checkForm()
+{
+	if($('#content').val() == '')
+	{
+		alert('请填写退款原因');
+		return false;
+	}
+
+	if($('[name="order_goods_id[]"]:checked').length == 0)
+	{
+		alert('请选择要退款的商品');
+		return false;
+	}
+	return true;
+}
+</script>

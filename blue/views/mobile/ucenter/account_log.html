@@ -1,0 +1,38 @@
+{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+{set:$user_id = $this->user['user_id']}
+{set:$queryAccountLogList = Api::run('getUcenterAccoutLog',$user_id)}
+{set:$items = $queryAccountLogList->find()}
+<section>
+<div class="pending-detial">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">账户余额:￥{$this->memberRow['balance']}</h3>
+        </div>
+        {if:$items}
+        {foreach:items = $items}
+        <table class="table table-bordered table-hover">
+            <tbody>
+                <tr>
+                    <td style="width:50px">事件</td>
+                    <td>{$item['note']}</td>
+                </tr>
+                <tr>
+                    <td>金额</td>
+                    <td>{$item['amount']}</td>
+                </tr>
+                <tr>
+                    <td>时间</td>
+                    <td>{$item['time']}</td>
+                </tr>
+            </tbody>
+        </table>
+        {/foreach}
+        {$queryAccountLogList->getPageBar()}
+        {else:}
+        <ul>
+        	<li class="text-center">当前暂无数据</li>
+    	</ul>
+        {/if}
+    </div>
+</div>
+</section>

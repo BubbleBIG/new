@@ -1,0 +1,57 @@
+{set:$user_id = $this->user['user_id']}
+{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+{set:$queryPointLog = Api::run('getUcenterPointLog',$user_id,$this->c_datetime)}
+{set:$items = $queryPointLog->find()}
+<section>
+<div class="pending-detial">
+    <div class="panel-heading">
+        <h3 class="panel-title">我的积分</h3>
+    </div>
+
+	<!--积分消耗列表 开始-->
+	{if:$items} {foreach:items = $items}
+	<table class="table table-bordered table-hover" style="border:1px solid #ccc">
+		<tbody>
+			<tr>
+				<td>积分日期</td>
+				<td>{$item['datetime']}</td>
+			</tr>
+			<tr>
+				<td>积分</td>
+				<td>{$item['value']}分</td>
+			</tr>
+			<tr>
+				<td>说明</td>
+				<td>{$item['intro']}</td>
+			</tr>
+		</tbody>
+	</table>
+	{/foreach}
+	{$queryPointLog->getPageBar()}
+	<!--积分消耗列表 结束-->
+
+    {else:}
+    <ul>
+        <li class="text-center">当前暂无数据</li>
+    </ul>
+    {/if}
+
+    <div class="pending-detial">
+        <div class="row clearfix">
+            <h2 style="margin-top:0;margin-left:10px">积分兑换</h2>
+            <form action='{url:/ucenter/trade_ticket}' method='post'>
+                {set:$nowtime = ITime::getDateTime();$isHasTicket = false;} {foreach:items=Api::run('getTicketList',array('#nowtime#',$nowtime),20)} {set:$isHasTicket = true;}
+                <div style="margin-bottom:10px" class="col-md-6  column">
+                    <input type="radio" class="option-input radio" style="position:relative" name='ticket_id' value="{$item['id']}" class="">{$item['name']}：{$item['value']}元（需要{$item['point']}积分）
+                </div>
+                <div style="margin-bottom:10px" class="col-md-6 column">有效日期：{$item['start_time']}至{$item['end_time']}
+                </div>
+                {/foreach}
+                <div style="margin-bottom:10px" class="col-md-12  column">
+                    <input type="submit" value="兑换代金券" class="btn  btn-block">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</section>

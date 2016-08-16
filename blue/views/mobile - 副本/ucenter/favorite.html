@@ -1,0 +1,42 @@
+{set:$favoriteObj = null;$favoriteList = $this->get_favorite($favoriteObj)}
+<section>
+<div class="pending-detial">
+    <div class="panel-heading">
+        <h3 class="panel-title">收藏列表</h3>
+    </div>
+    {if:$favoriteList} {foreach:items=$favoriteList} {set:$tmp=$item['data']['id'];$tmpIMG=$item['data']['img'];}
+    <div class="pro_list border-bottom">
+        <div class="col-xs-4">
+            <a href="{url:/site/products/id/$tmp}"><img src="{webroot:$tmpIMG}" class="img-responsive" alt=""></a>
+        </div>
+        <div class="col-xs-8">
+            <h4><a href="{url:/site/products/id/$tmp}">{$item['data']['name']}</a></h4>
+            <h5>备注：<input class="form-control" id="summary_val_{$item['id']}" value="{$item['summary']}" onblur="edit_summary({$item['id']});" /></h5>
+            <h5><input type='button' class='btn' value='取消关注' onclick="delModel({link:'{url:/ucenter/favorite_del/id/$item[id]}',msg:'是否取消收藏？'});"  /></h5>
+        </div>
+    </div>
+    {/foreach}
+    {else:}
+    <ul>
+        <li class="text-center">当前暂无数据</li>
+    </ul>
+    {/if}
+</div>
+</section>
+
+<script type="text/javascript">
+//修改备注信息
+function edit_summary(idVal)
+{
+	var summary = $("#summary_val_"+idVal).val();
+	if($.trim(summary))
+	{
+		$.getJSON('{url:/ucenter/edit_summary}',{id:idVal,summary:summary},function(content){
+			if(content.isError == true)
+			{
+				alert(content.message);
+			}
+		});
+	}
+}
+</script>

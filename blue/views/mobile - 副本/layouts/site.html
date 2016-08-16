@@ -1,0 +1,155 @@
+{set:
+	$myCartObj  = new Cart();
+	$myCartInfo = $myCartObj->getMyCart();
+	$siteConfig = new Config("site_config");
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>{echo:$siteConfig->name}</title>
+	<link type="image/x-icon" href="{webroot:favicon.ico}" rel="icon">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="apple-touch-icon-precomposed" href="{skin:images/front/logo.gif}">
+	<link rel="stylesheet" href="{skin:css/home.css}" />
+	{js:jquery}
+	{js:form}
+	{js:validate}
+	{js:dialog}
+	<!-- {js:artTemplate} -->
+	<script type='text/javascript' src="{theme:javascript/common.js}"></script>
+	<script type='text/javascript' src='{theme:javascript/site.js}'></script>
+	<script src="{skin:js/bootstrap.js}"></script>
+	<link href="{skin:font/css/font-awesome.css}" rel="stylesheet">
+	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+</head>
+<body>
+	<!--头部信息 开始-->
+	<header>
+		<div class="header">
+			<a id="kros_user" class="icon iconfont back" href="javascript:void(0)" onclick="window.history.back();" title="返回"><img src="{skin:images/back.png}"></a>
+			<span class="headline">{echo:$siteConfig->name}</span>
+			<a class="icon iconfont search " href="javascript:void(0)" title="搜索商品"><img src="{skin:images/search.png}" onclick="$('.moda').toggle();"></a>
+		</div>
+	</header>
+	<!--头部信息 结束-->
+	<div class="viewport" style="margin-top:52px;margin-bottom:20px;min-height:220px;">
+		<!--搜索框 开始-->
+		<div class="">
+	</div>
+		<!--搜索框 开始-->
+		{viewcontent}
+	</div>
+	<!-- Modal -->
+<div class="moda" id="myModa" style="display: none;">
+
+      <div class="">
+       <form method='get' action='{url:/}' class="search-ll">
+				<input type='hidden' name='controller' value='site' />
+				<input type='hidden' name='action' value='search_list' />
+				<div class="">
+				<div class="btn-sear">
+				<div class="row">
+				    <div class="col-lg-12">
+				    <div class="input-group">
+				    <span class="input-group-btn">
+				    	<a class="icon iconfont search " href="javascript:void(0)" title="搜索商品"><img src="{skin:images/cancel.png}" onclick="$('.moda').toggle();" style="background: #f7ab00;"></a>
+				    </span>
+				      <input class="input-l form-control"  style="height:38px;" type="text" name='word' autocomplete="off" value="输入关键字..." />
+				      <span class="input-group-btn">
+				        <button align='center' type="submit" class='' onclick="checkInput('word','输入关键字...');"><img src="{skin:images/search4.png}" style="width: 32px;"></button>
+				      </span>
+				    </div><!-- /input-group -->
+				  	</div><!-- /.col-lg-6 -->
+				</div><!-- /.row -->
+				</div>
+				</div>
+			</form>
+			<!--自动完成div 开始-->
+			<ul class="auto_list" style='display:none'></ul>
+			<!--自动完成div 开始-->
+      </div>
+
+</div>
+<div class="container">
+    <div class="kros_foot row">
+
+		{if:$this->user}
+		<div class="login col-lg-6 col-xs-6">
+			<a class="reg khidden">{echo:$this->user['username']}您好!</a><a href="{url:/simple/logout}" class="reg">安全退出</a>
+		</div>
+		{else:}
+        <div class="login col-lg-6 col-xs-6">
+            <a href="{url:simple/login}" style="font-size: 18px;font-weight: bold;">登录</a>
+            <span>|</span>
+            <a href="{url:simple/reg}" style="font-size: 18px;font-weight: bold;">注册</a>
+        </div>
+	    {/if}
+    </div>
+</div>
+	<div class="actGotop"><a href="javascript:;" title="返回顶部"></a> <img src="{skin:images/up.png}" alt="">
+	</div>
+	<div class="bottom-l" style="margin-bottom: 60px;">
+
+        <hr style="display: none;">
+    </div>
+    <!--底部菜单 开始-->
+	<div class="s_footer">
+	    <ul>
+	    <li>
+		<a id="kros_a" href="{url:/}">
+		<img src="{skin:images/home.png}">
+		<em>首页</em>
+		</a>
+	    </li>
+
+	<li>
+		<a id="kros_b" href="{url:simple/cart}">
+		<img src="{skin:images/shopcart.png}">
+		<em>购物车</em>
+		</a>
+	</li>
+
+
+	<li>
+		<a id="kros_c" href="{url:/ucenter/index}">
+		<img src="{skin:images/person.png}">
+		<em>个人中心</em>
+		</a>
+	</li>
+
+	<li>
+		<a id="kros_d" href="{url:site/sitemap}">
+		<img src="{skin:images/classify.png}">
+		<em>分类</em>
+		</a>
+	</li>
+
+	    </ul>
+	</div>
+	<!--底部菜单 结束-->
+	<link rel="stylesheet" href="{skin:css/site.css}" type="text/css" />
+</body>
+</html>
+<script type="text/javascript">
+    $('input:text[name="word"]').bind({
+        keyup:function(){autoComplete('{url:/site/autoComplete}','{url:/site/search_list/word/@word@}','{$siteConfig->auto_finish}');}
+    });
+
+    {set:$word = IReq::get('word') ? IFilter::act(IReq::get('word'),'text') : '输入关键字...'}
+    $('input:text[name="word"]').val("{$word}");
+
+    // 回到顶部
+    $(function(){
+    $(window).scroll(function() {
+        if($(window).scrollTop() >= 100){
+            $('.actGotop').fadeIn(300);
+        }else{
+            $('.actGotop').fadeOut(300);
+        }
+    });
+    $('.actGotop').click(function(){$('html,body').animate({scrollTop: '0px'}, 300);});
+});
+</script>

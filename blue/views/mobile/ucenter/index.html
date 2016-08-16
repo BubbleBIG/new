@@ -1,0 +1,68 @@
+{set:$user_id = $this->user['user_id']}
+{set:$user = Api::run('getMemberInfo',$user_id)}
+{set:$statistics = Api::run('getMemberTongJi',$user_id)}
+{set:$msgObj = new Mess($user_id);$msgNum = $msgObj->needReadNum()}
+{set:$propIds = trim($user['prop'],',');$propIds = $propIds ? $propIds : 0}
+{set:$propData = Api::run('getPropTongJi',$propIds)}
+<script type="text/javascript">
+$(function()
+{
+    $(".headline").text('个人中心');
+})
+</script>
+<section style="width:100%">
+    <div class="user">
+        <!--顶部基本信息 开始-->
+        <div class="info">
+            <table width="100%">
+                <tbody>
+                    <tr style="height:30px;">
+                        <td width="50%">
+                            用户名：{$this->user['username']}
+                        </td>
+                        <td>
+                            余额：
+                            <strong>￥{$user['balance']}</strong>
+                        </td>
+                    </tr>
+                    <tr style="height:30px;">
+                        <td>
+                            积分：
+                            <strong>{$user['point']}</strong>
+                        </td>
+                        <td>
+                            代金券：
+                            <strong>{$propData['prop_num']} 张</strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--顶部基本信息 结束-->
+        <!--账户管理菜单 开始-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> <i class="fa fa-user kcart"> </i>个人中心</h3>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item "><a href="{url:/ucenter/order}"><i class="fa fa-pencil kcart"></i>我的订单<i class="fa fa-chevron-right"></i></a></li>
+                <!-- <li class="list-group-item"><a href="{url:ucenter/integral}"><i class="fa fa-github-alt kcart"></i>我的积分<i class="fa fa-chevron-right"></i></a></li> -->
+                <li class="list-group-item"><a href="{url:ucenter/redpacket}"><i class="fa fa-newspaper-o kcart"></i>我的代金券<i class="fa fa-chevron-right"></i></a></li>
+                <li class="list-group-item"><a href="{url:ucenter/refunds}"><i class="fa fa-file kcart"></i>退款申请<i class="fa fa-chevron-right"></i></a></li>
+                <!-- <li class="list-group-item"><a href="{url:ucenter/account_log}"><i class="fa fa-jpy kcart"></i>账户余额<i class="fa fa-chevron-right"></i></a></li> -->
+                <!-- <li class="list-group-item"><a href="{url:ucenter/withdraw}"><i class="fa fa-dollar kcart"></i>申请提现<i class="fa fa-chevron-right"></i></a></li> -->
+                <li class="list-group-item"><a href="{url:ucenter/evaluation}"><i class="fa fa-thumbs-up kcart"></i>我的评论<i class="fa fa-chevron-right"></i></a></li>
+                <li class="list-group-item"><a href="{url:ucenter/favorite}"><i class="fa fa-flag kcart"></i>我的收藏<i class="fa fa-chevron-right"></i></a></li>
+                <!-- <li class="list-group-item"><a href="{url:ucenter/online_recharge}"><i class="fa fa-money kcart"></i>在线充值<i class="fa fa-chevron-right"></i></a></li> -->
+                <li class="list-group-item"><a href="{url:ucenter/address}"><i class="fa fa-map-marker kcart"></i>地址管理<i class="fa fa-chevron-right"></i></a></li>
+                <li class="list-group-item"><a href="{url:ucenter/info}"><i class="fa fa-child kcart"></i>个人资料<i class="fa fa-chevron-right"></i></a></li>
+                <li class="list-group-item"><a href="{url:ucenter/password}"><i class="fa fa-lock kcart"></i>密码修改<i class="fa fa-chevron-right"></i></a></li>
+            </ul>
+        </div>
+        <a href="{url:/simple/logout}" style="width:100%;color:#fff" id="btn  btn-block" class="btn">
+
+	            退出登录
+	        </a>
+        <!--账户管理菜单 结束-->
+    </div>
+</section>

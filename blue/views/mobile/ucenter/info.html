@@ -1,0 +1,166 @@
+{js:artTemplate}
+<script type='text/javascript' src='{theme:javascript/artTemplate/area_select.js}'></script>
+{js:my97date}
+<div class="pending-detial">
+    <div class="panel-heading">
+        <h3 class="panel-title">个人资料</h3>
+    </div>
+    <div class="panel-body">
+        <form action='{url:/ucenter/info_edit_act}' name='user_info' method="POST" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">姓名:</label>
+                <div class="col-sm-10">
+                    <input type="text" name="true_name" class="form-control" initmsg=''>
+                </div>
+            </div>
+            <div class="form-group" align="center">
+                {set:$user_ico = $this->userRow['head_ico']}
+                <a class="ico" href="javascript:void(0);" ><img src="{webroot:$user_ico}" id="user_ico_img" onerror="this.src='{skin:images/front/user_ico.gif}'" width="88" height="88" alt="个人头像" style="border: 1px solid #ececec;padding: 2px;margin-bottom: 8px;" /></a>
+                <p><a type="button" class="blue" href="javascript:select_ico();" style="margin: 2px;padding: 3px 5px;color: #fff;background: #F7AB00;border-radius: 3px;">修改头像</a></p>
+            </div>
+            <div class="form-group">
+                <div class="radio">
+                    <div class="radio">
+                        <label for="input" class="col-sm-2 control-label">性别:</label>
+                        <label>
+                            <input type="radio" class="option-input radio" style="position:relative" name="sex" value="1"> 男
+                        </label>
+                        <label>
+                            <input type="radio" class="option-input radio" style="position:relative" name="sex" value="2" checked="checked"> 女
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">出生日期:</label>
+                <div class="col-sm-10">
+                    <input type="text" name="birthday" class="Wdate form-control" style="width:100%" pattern='date' empty onFocus="WdatePicker()" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">所在地区:</label>
+                <div class="col-sm-2">
+                    <select name="province" child="city,area" onchange="areaChangeCallback(this);" class="form-control">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select name="city" child="area" parent="province" onchange="areaChangeCallback(this);" class="form-control">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select name="area" parent="city" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">联系地址:</label>
+                <div class="col-sm-10">
+                    <input type="text" name='contact_addr' class="form-control" value="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">手机号码:</label>
+                <div class="col-sm-10">
+                    <input type="text" name='mobile' class="form-control" empty pattern='mobi' value=""  />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">电子邮箱:</label>
+                <div class="col-sm-10">
+                    <input type="text" name='email' class="form-control" pattern="email" empty value=""  />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">邮编:</label>
+                <div class="col-sm-10">
+                    <input type="text" name='zip' class="form-control" pattern='zip' empty value=""  />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">固定电话:</label>
+                <div class="col-sm-10">
+                    <input type="text" name='telephone' class="form-control" pattern='phone' empty  value="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input" class="col-sm-2 control-label">QQ:</label>
+                <div class="col-sm-10">
+                    <input type="text" name='qq' class="form-control" value="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <button type="submit" class="btn  btn-block" style="width:95%">保存基本信息</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type='text/javascript'>
+//DOM加载完毕
+$(function(){
+    //初始化地域联动
+    template.compile("areaTemplate",areaTemplate);
+
+    {if:isset($this->memberRow['area']) && $this->memberRow['area']}
+    {set:$area = explode(',',trim($this->memberRow['area'],','))}
+    {/if}
+
+    {if:isset($area[0]) && isset($area[1]) && isset($area[2])}
+    createAreaSelect('province',0,{$area[0]});
+    createAreaSelect('city',{$area[0]},{$area[1]});
+    createAreaSelect('area',{$area[1]},{$area[2]});
+    {else:}
+    createAreaSelect('province',0,"");
+    {/if}
+});
+/**
+ * 生成地域js联动下拉框
+ * @param name
+ * @param parent_id
+ * @param select_id
+ */
+function createAreaSelect(name,parent_id,select_id)
+{
+	//生成地区
+	$.getJSON("{url:/block/area_child}",{"aid":parent_id,"random":Math.random()},function(json)
+	{
+		$('[name="'+name+'"]').html(template.render('areaTemplate',{"select_id":select_id,"data":json}));
+	});
+}
+//修改头像
+function select_ico()
+{
+    {set:$callback = urlencode(IUrl::creatUrl('/ucenter/user_ico_upload'))}
+    art.dialog.open('{url:/block/photo_upload?callback=$callback}',
+    {
+        'id':'user_ico',
+        'title':'设置头像',
+        'ok':function(iframeWin, topWin)
+        {
+            iframeWin.document.forms[0].submit();
+            return false;
+        }
+    });
+}
+
+//头像上传回调函数
+function callback_user_ico(content)
+{
+    var content = eval(content);
+    if(content.isError == true)
+    {
+        alert(content.message);
+    }
+    else
+    {
+        $('#user_ico_img').attr('src',content.data);
+    }
+    art.dialog({id:'user_ico'}).close();
+}
+//表单回填
+var formObj = new Form('user_info');
+formObj.init({echo:JSON::encode($this->memberRow)});
+</script>

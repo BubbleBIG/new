@@ -1,0 +1,42 @@
+{set:$user_id = $this->user['user_id']}
+{set:$member_info = Api::run('getMemberInfo',$user_id)}
+{if:$member_info['prop']!=''}
+{set:$ids=trim($member_info['prop'],',')}
+{/if}
+<section>
+<div class="pending-detial">
+    <div class="panel-heading">
+        <h3 class="panel-title">代金券</h3>
+    </div>
+    {if:isset($ids) && $ids!=''} {set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;} {set:$queryPropList = Api::run('getPropList',$ids)} {foreach:items = $queryPropList->find()}
+
+  	<table class="table table-bordered table-hover" style="border:1px solid #ccc">
+        <tbody>
+            <tr>
+                <td>编号</td>
+                <td>{$item['card_name']}</td>
+            </tr>
+            <tr>
+                <td>面值</td>
+                <td>{$item['value']}元</td>
+            </tr>
+            <tr>
+                <td>有效时间</td>
+                <td>{echo:substr($item['end_time'],0,10)}</td>
+            </tr>
+               <tr>
+                <td>状况</td>
+                <td>{if:$item['is_userd']==1}已使用{elseif:$item['is_close']==1}已禁用{elseif:$item['is_close']==2}临时锁定{elseif:(strtotime('now')-strtotime($item['end_time']))>0}已过期{else:}可使用{/if}</td>
+            </tr>
+        </tbody>
+    </table>
+    {/foreach}
+    {$queryPropList->getPageBar()}
+
+    {else:}
+    <ul>
+        <li class="text-center">当前暂无数据</li>
+    </ul>
+    {/if}
+</div>
+</section>

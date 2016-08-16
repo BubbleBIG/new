@@ -1,0 +1,272 @@
+.kros_search {
+  box-shadow: none;
+  padding: 1rem 1rem;
+  top: auto;
+  display: none;
+}
+
+.yui3-button {
+   box-shadow: 0 0 0 1px rgba(194, 150, 150, 0.25) inset, 0 2px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 2px rgba(0, 0, 0, 0.15);
+ }
+ input[type="text"], input[type="password"] {
+  border: 1px solid #DFDDDF;
+  color: #a0a0a0;
+  font-size: 14px;
+  height: 44px;
+  line-height: normal;
+}
+
+textarea{
+border: 1px solid #DFDDDF;
+}
+
+.row_swiper {
+  padding: 0;
+}
+.bx-wrapper .bx-viewport {
+  background: none repeat scroll 0 0 #fff;
+  border: 0px solid #fff;
+  box-shadow: 0 0 0px #ccc;
+  left: 0px;
+  transform: translateZ(0px);
+}
+.s_footer {
+  background: none repeat scroll 0 0 #fff;
+  border-top: 1px solid #dfdddf;
+  bottom: 0;
+  float: left;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+.s_footer ul li {
+  float: left;
+  height: 53px;
+  text-align: center;
+  width: 25%;
+}
+.s_footer ul li a {
+  display: block;
+  float: left;
+  height: 53px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+.s_fcolor a {
+}
+a:link, a:visited, a:hover {
+  color: #22222d;
+  text-decoration: none;
+}
+.s_footer ul li a em {
+  display: block;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  width: 100%;
+}
+.s_footer ul li {
+  float: left;
+  height: 53px;
+  text-align: center;
+  width: 25%;
+}
+.s_footer ul li a {
+  color: #f7ab00;
+}
+.fa-15x {
+  font-size: 1.5em;
+}
+.s_fcolor a {
+  color: #EC5858;
+}
+em, cite, i {
+  font-style: normal;
+}
+.fa1 {
+
+  line-height: 1.3;
+  margin-top: 6px;
+
+}
+.kros_foot{
+  padding-bottom:70px;
+}
+*{letter-spacing: 0}
+
+.login > a,.jump> a,.login > span,.jump> span{
+  font-size: 14px;
+}
+.kros_cur{
+  color: #FB3D3D;
+}
+
+.px {
+    background-color: #fff;
+    line-height: 30px;
+    text-indent: 10px;
+    color: #0C0C0C;
+    border:medium none;
+    }
+
+ ::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+
+*{margin:0;padding: 0}
+
+
+
+.head.col-md-5.col-xs-5.column {
+  font-size: 10px;
+}
+
+.yui3-u-1-3.badge.bg-dot {
+  background: red;
+}
+
+input[type=checkbox],input[type=radio] {
+  display: inline-block;
+  margin:0;
+  box-sizing:border-box;
+  padding:0;
+  *height:13px;
+  *width:13px;
+}
+
+.left{float: left}
+.total-table table {
+  float: right;
+  width: auto;
+}
+.table {
+  margin-bottom: 20px;
+  max-width: 100%;
+  width: 100%;
+}
+
+h2 {
+  padding-top: 0;
+}
+
+.area_box {
+  background-color: #fdffee;
+  border: 2px solid #ffbf69;
+  height: 260px;
+  left: 20px;
+  overflow: hidden;
+  padding: 5px;
+  position: absolute;
+  top: 15px;
+  width: 315px;
+}
+.area_box li {
+  float: left;
+  margin: 0;
+  padding: 2px;
+  color: #636363;
+  line-height: 20px;
+
+}
+
+.area_box li a {
+  display: block;
+  text-align: center;
+  width: 50px;
+  font-size: 12px;
+}
+.relative{
+  position: relative;
+}
+
+.disblock{
+  display: block;
+}
+
+.disnone{
+  display: none;
+}
+
+.relative   span {
+  line-height: 20px;
+}
+.btn:hover {
+  color: #fff;
+}
+
+.actGotop {
+    position: fixed;
+    bottom: 6rem;
+    right: 0%;
+    display: none;
+    z-index: 1;
+}
+.actGotop img{
+    width: 40px;
+}
+.detai p {
+  font-size: 16px;
+  font-weight: bold;
+}
+.footer-l {
+  position: fixed;
+  z-index: 1;
+  bottom: 40px;
+  left: 0;
+  width: 100%;
+  background: #fff;
+}
+.footer-l input {
+  padding: 0;
+  width: 100%;
+  height: 40px;
+  font-size: 1.80rem;
+  font-weight: bold;
+  background: #f7ab00;
+  border-radius: 3px;
+}
+#myModa {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: #fff;
+}
+.btn-sear {
+  height: 52px;
+  background: #f7ab00;
+}
+#myModa a {
+  margin-left: 14px;
+
+}
+#myModa img {
+margin-top: 3px;
+width: 46px;
+}
+#myModa input {
+  padding: 1px 8px;
+  margin-top: 7px;
+  border-radius: 3px;
+}
+#myModa button {
+  border: none;
+  border-radius: 40px;
+  margin: 3px 15px 0 4px;
+  font-weight: bold;
+  color: #f7ab00;
+  background: #fff;
+  height: 40px;
+  width: 40px;
+}
+#myModa button img {
+  margin-top: -3px;
+}

@@ -1,0 +1,91 @@
+{set:
+$siteObj=new Config('site_config');
+$site_config=$siteObj->getInfo();
+$seo_data = array('title' => "第三方登录_".$site_config['name']);
+seo::set($seo_data);
+}
+<style type="text/css">
+	.valid-msg{display:none;line-height:0px}
+</style>
+<div class="clearfix"><hr /></div>
+<div class="container-fluid">
+{set:$type = IReq::get('bind_type')}
+{if:$type == 'exists'}
+<h3>登录已有账号进行绑定</h3>
+<form action='{url:/simple/bind_exists_user}' method='post' class="form-horizontal">
+	<div class="form-group">
+		<p class="text-primary bg-info" style="padding:15px">
+			绑定已有账号信息，您可以直接把第三方登录的用户信息与您已经注册过的账号进行绑定
+		</p>
+	</div>
+
+	<div class="form-group">
+		<input type="text" name="login_info" placeholder="用户名/邮箱/手机号" class="form-control" pattern="required" alt="请输入正确的用户名或者邮箱地址" />
+	</div>
+
+	<div class="form-group">
+		<input type="password" name='password' placeholder="密码" class="form-control" pattern="^\S{4,20}$" alt="请输入正确的密码4-20个字符" />
+	</div>
+
+	<input type="submit" value="登录绑定" class="btn btn-primary" />
+	<input type="button" value="没有账号" class="btn btn-warning" onclick="window.location.href='{url:/simple/bind_user}';" />
+</form>
+
+{else:}
+
+<h3>完善基本的账号信息</h3>
+<form action='{url:/simple/bind_not_exists_user}' method='post' class="form-horizontal">
+	<div class="form-group">
+		<p class="text-primary bg-info" style="padding:15px">
+			完善了基本信息后，您可以直接把第三方登录的用户信息与您的注册账号进行绑定
+		</p>
+	</div>
+
+	{if:$siteObj->reg_option == 1}
+	<div class="form-group">
+		<input class="form-control" placeholder="邮箱" type="text" name='email' pattern="email" alt="填写正确的邮箱格式" />
+	</div>
+	{/if}
+
+	<div class="form-group">
+		<input class="form-control" placeholder="用户名" name='username' type="text" pattern="^[\w\u0391-\uFFE5]{2,20}$" alt="填写2-20个字符，可以为字数，数字下划线和中文" />
+	</div>
+
+	<div class="form-group">
+		<input class="form-control" placeholder="设置密码" type="password" name='password' pattern="^\S{6,32}$" bind='repassword' alt='填写6-32个字符' />
+	</div>
+
+	<div class="form-group">
+		<input class="form-control" placeholder="确认密码" type="password" name='repassword' pattern="^\S{6,32}$" bind='password' alt='重复上面所填写的密码' />
+	</div>
+
+	<div class="form-group">
+		<input class='form-control' placeholder="验证码" type='text' name='captcha' pattern='^\w{5,10}$' alt='填写图片所示的字符' />
+	</div>
+
+	<div class="form-group">
+		<img src='{url:/simple/getCaptcha}' id='captchaImg' onclick="changeCaptcha('{url:/simple/getCaptcha}');" />
+	</div>
+
+	{if:$siteObj->reg_option == 3}
+	<div class="form-group">
+		<input class="form-control" placeholder="手机号" type="text" name='mobile' pattern="mobi" alt="填写正确的手机格式" />
+	</div>
+
+	<div class="form-group">
+		<input class='form-control' placeholder="手机验证" type='text' name='mobile_code' pattern='^\w{4,6}$' />
+	</div>
+
+	<div class="form-group">
+		<input class="btn btn-success active" onclick="_sendMobileCode(this);" type="button" value="获取验证码" />
+	</div>
+	{/if}
+
+	<div class="form-group">
+		<input type="submit" value="注册绑定" class="btn btn-primary" />
+		<input type="button" value="我有账号" class="btn btn-warning" onclick="window.location.href='{url:/simple/bind_user/bind_type/exists}';" />
+	</div>
+</form>
+{/if}
+</div>
+<div class="clearfix"><hr /></div>

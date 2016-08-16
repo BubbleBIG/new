@@ -1,0 +1,70 @@
+{set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+{set:$user_id = $this->user['user_id']}
+{set:$queryRefundmentDocList = Api::run('getRefundmentDocList',$user_id)}
+{set:$items = $queryRefundmentDocList->find()}
+<section>
+<div class="pending-detial">
+    <div class="panel-heading">
+        <h3 class="panel-title">退款申请</h3>
+    </div>
+	{if:$items}
+	{foreach:items = $items}
+	<table class="table table-bordered table-hover" style="border:1px solid #ccc">
+		<tbody>
+			<tr>
+				<td>退款订单</td>
+				<td>{$item['order_no']}</td>
+			</tr>
+
+			<tr>
+				<td>状态</td>
+				<td>{if:$item['pay_status']==0}<a class="blue" href='javascript:delModel({link:"{url:/ucenter/refunds_del/id/$item[id]}"})'>取消</a>{/if}</td>
+			</tr>
+
+			<tr>
+				<td>操作</td>
+				<td>{echo:$this->data['dispose_time']?$this->data['dispose_time']:'未处理';}</td>
+			</tr>
+		</tbody>
+	</table>
+	{/foreach}
+	{$queryRefundmentDocList->getPageBar()}
+	{else:}
+	<ul>
+		<li class="text-center">当前暂无数据</li>
+	</ul>
+	{/if}
+</div>
+</section>
+
+<script type='text/javascript'>
+//DOM加载完毕
+$(function()
+{
+	{if:IReq::get('order_no')}
+    $('#refunds_list').toggle();
+    $('#refunds_form').toggle();
+	{/if}
+})
+
+function form_back(obj)
+{
+    var form = new Form('refunds');
+    form.init(obj);
+    $('#refunds_list').hide();
+    $('#refunds_form').show();
+}
+
+function form_add()
+{
+    var form = new Form('refunds');
+    form.init({"order_no":"","amount":"","content":""});
+}
+
+{if:isset($this->msg) && $this->msg!=''}
+alert('{$this->msg}');
+var form = new Form('refunds');
+var obj = {$this->info};
+form.init(obj);
+{/if}
+</script>

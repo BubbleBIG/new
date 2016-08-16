@@ -1,0 +1,92 @@
+{set:$average_point=$this->comment_info['average_point'];}
+{set:$goods_id=$this->comment['goods_id'];}
+{set:$id=intval(IReq::get('id'));}
+{set:$item=Api::run('getGoodsInfo',array("#id#",$goods_id))}
+<section>
+    <div class="pending-detial">
+    	<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">商品评论</h3>
+			</div>
+			{if:$this->can_submit === true}
+			<table class="table table-bordered table-hover">
+				<tbody>
+					<tr>
+						<td>商品名称</td>
+						<td><a class="orange" href="{url:/site/products/id/$goods_id}">{$item['name']}</a></td>
+					</tr>
+				<tr>
+				<td>评论等级</td>
+				<td>  <p class="sum">
+				<label  style="display:block">
+				<input name="point"  class="option-input radio" style="position:relative" type="radio" value="5" checked="checked" /><span >
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				</span>
+				</label>
+				<label style="display:block">
+				<input name="point"  class="option-input radio" style="position:relative" type="radio" value="4" /><span >
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				</span></label>
+				<label style="display:block">
+				<input name="point"  class="option-input radio" style="position:relative" type="radio" value="3" /><span >
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				</span></label>
+				<label style="display:block">
+				<input name="point" class="option-input radio" style="position:relative" type="radio" value="2" /><span >
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				<i class="fa fa-star" style="color:#F7762E"></i>
+				</span></label>
+				<label style="display:block">
+				<input name="point"  class="option-input radio" style="position:relative" type="radio" value="1" /><span ><i class="fa fa-star" style="color:#F7762E"></i>
+				</span></label>
+				</p></td>
+				</tr>
+				<tr>
+				<td>评论内容</td>
+				<td> <textarea name="contents" id="contents" style="width:100%;"></textarea></td>
+				</tr>
+				</tbody>
+			</table>
+	        <input type="button" class="btn"  style="width:95%;margin-left:10px" value="保存" onclick="comment_add();" />
+	        {else:}
+	        <ul class='block-row'>
+	            <li><strong>您暂不能对该商品进行评价，可能有以下原因：</strong></li>
+	            <li>1.您可能没有在{echo:$siteConfig->name}购买过该商品；</li>
+	            <li>2.您已经评价过该商品。</li>
+	        </ul>
+	        {/if}
+    	</div>
+    </div>
+</section>
+<script language="javascript">
+function comment_add()
+{
+	var point=$("input[name='point']:checked").val();
+	if(point==0)
+	{
+		alert("请选择评论等级");
+		return;
+	}
+
+	var contents=$("#contents").val();
+	var data={'point':point,'contents':contents,'id':{$id}};
+	$.post("{url:/site/comment_add/id/$id}",data,function(c)
+	{
+		if(c==='success')
+		{
+			location="{url:/site/comments_list/id/$goods_id}";
+		}
+		else
+			alert(c);
+	});
+}
+</script>

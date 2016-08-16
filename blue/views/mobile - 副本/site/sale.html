@@ -1,0 +1,37 @@
+{set:
+  $site_config=new Config('site_config');
+  $seo_data=array();
+  $seo_data['title']=$site_config->name;
+  $seo_data['title'].="_特价商品专区";
+  $seo_data['keywords']="特价商品专区";
+  $seo_data['description']="特价商品专区";
+  seo::set($seo_data);
+}
+<section class="container-full">
+{foreach:items=Api::run('getSaleList') item=$promRow}
+    <div class="label" style="margin:0">
+        <a class="label1" href="javascript:void(0)"><i class="on"></i>{$promRow['name']}</a>
+    </div>
+    {foreach:items=$promRow['goodsList']}
+    <div class="pro_list border-bottom">
+        <div class="col-xs-4">
+            <a href="{url:/site/products/id/$item[id]}"><img src="{url:/pic/thumb/img/$item[img]/w/200/h/200}" class="img-responsive" alt=""></a>
+        </div>
+        <div class="col-xs-8">
+            <h5 style="margin-top:0"><a href="{url:/site/products/id/$item[id]}">{$item['name']}</a></h5>
+            <div style="margin-top:20px">
+                <span class="red">￥{$item['sell_price']}</span>
+                <span style="float:right;font-size:12px;margin-right:5px;text-decoration:line-through">￥{$item['market_price']}</span>
+            </div>
+        </div>
+    </div>
+    {/foreach} 
+{/foreach}
+</section>
+
+
+
+
+
+
+

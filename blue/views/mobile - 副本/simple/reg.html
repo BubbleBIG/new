@@ -1,0 +1,49 @@
+{set:
+$siteObj=new Config('site_config');
+$site_config=$siteObj->getInfo();
+$seo_data = array('title' => "用户注册_".$site_config['name']);
+seo::set($seo_data);
+}
+<section class="reg">
+    <div class="form">
+        <form action='{url:/simple/reg_act}' method='post'>
+            <ul>
+            	{if:$siteObj->reg_option == 1}
+                <li class="user-info">
+                    <input class='form-control' placeholder="邮箱" initmsg="输入正确" type="text" name='email' pattern="email" alt="填写正确格式" />
+                </li>
+                {/if}
+
+                <li class="user-info">
+                    <input class='form-control' placeholder="用户名" initmsg="输入正确" type="text" name='username' pattern="^[\w\u0391-\uFFE5]{2,20}$" alt="填写2-20个字符" />
+                </li>
+                <li class="user-info">
+                    <input class='form-control' placeholder="密码" type="password" name='password' pattern="^\S{6,32}$" bind='repassword' alt='填写6-32个字符' />
+                </li>
+                <li class="user-info">
+                    <input class='form-control' placeholder="确认密码" name='repassword' pattern="^\S{6,32}$" bind='password' type="password" alt='重复上面密码' />
+                </li>
+                <li class="user-info">
+                    <input type='text' class='form-control' placeholder="填写下面验证码" name='captcha' pattern='^\w{5,10}$' alt='填写下面验证码' />
+                    <img src='{url:/simple/getCaptcha}' id='captchaImg' /><span class="light_gray">&nbsp;&nbsp;<a class="link" href="javascript:changeCaptcha('{url:/simple/getCaptcha}');">换一张</a></span>
+                </li>
+
+                {if:$siteObj->reg_option == 3}
+                <li class="user-info">
+                    <input type="text" class='form-control' placeholder="手机号" name='mobile' pattern="mobi"  alt='填写正确的手机格式' />
+                </li>
+                <li class="user-info">
+                    <input type="text" class='form-control' placeholder="手机号验证码" name='mobile_code' pattern='^\w{4,6}$' alt='填写手机验证码' />
+                </li>
+                <li class="user-info">
+					<button type="button" onclick="_sendMobileCode(this);" class="btn btn-info">发送验证码</button>
+                </li>
+                {/if}
+
+                <li class="enter">
+                    <button type="submit" class='btn btn-primary'>立即注册</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+</section>

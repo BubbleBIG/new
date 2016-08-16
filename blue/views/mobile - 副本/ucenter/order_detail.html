@@ -1,0 +1,179 @@
+{set:$item = $this->order_info;}
+{set:$orderStatus = Order_Class::getOrderStatus($item)}
+{js:artTemplate}
+<script type='text/javascript' src='{theme:javascript/artTemplate/area_select.js}'></script>
+<section>
+<div class="pending-detial">
+    <div class="panel-heading">
+        <h3 class="panel-title">订单详情</h3>
+    </div>
+
+    <table class="table table-bordered table-hover">
+    	<colgroup>
+			<col width="80px" />
+			<col />
+    	</colgroup>
+        <tbody>
+            <tr>
+                <td>订单编号</td>
+                <td>{$item['order_no']}</td>
+            </tr>
+            <tr>
+                <td>下单日期</td>
+                <td>{$item['create_time']}</td>
+            </tr>
+            <tr>
+                <td>订单状态</td>
+                <td>
+                    <form action='{url:/ucenter/order_status}' method='post'>
+					{echo:Order_Class::orderStatusText($orderStatus)}
+					<p>
+						<input type="hidden" name="order_id" value="{$item['id']}" />
+						{if:in_array($orderStatus,array(1,2))}
+						<input type="hidden" name='op' value='cancel' />
+						<input class="btn" type="submit" value="取消订单" />
+						{/if}
+
+						{if:$orderStatus == 2}
+						<input class="btn" type="button" value="立即付款" onclick="window.location.href='{url:/block/doPay/order_id/$item[id]}'" />
+						{/if}
+
+						{if:in_array($orderStatus,array(11,3))}
+						<input class="btn" type="hidden" name='op' value='confirm' />
+						<input class="btn" type="submit" value="确认收货" />
+						{/if}
+
+						{if:Order_Class::isRefundmentApply($this->order_info)}
+						<input class="btn" type="button" value="申请退款" onclick='javascript:window.location.href="{url:/ucenter/refunds_edit/order_id/$this->order_info['order_id']}"' />
+						{/if}
+					</p>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>订单价格</td>
+                <td>
+                    <p class="sum">
+                        商品总金额：￥{$item['payable_amount']}
+                        <font class="red">+</font> 运费：￥
+                        <label id="freightFee">{$item['real_freight']}</label>
+                        {if:$item['taxes'] > 0}
+                        <font class="red">+</font> 税金：￥{$item['taxes']} {/if} {if:$item['pay_fee'] > 0}
+                        <font class="red">+</font> 支付手续费：￥{$item['pay_fee']} {/if} {if:$item['insured'] > 0}
+                        <font class="red">+</font> 保价：￥{$item['insured']} {/if} {if:$item['discount'] != 0}
+                        <font class="red">+</font> 订单折扣或涨价：￥{$item['discount']} {/if} {if:$item['promotions'] > 0}
+                        <font class="red">+</font> 促销优惠金额：￥{$item['promotions']} {/if}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>共需支付</td>
+                <td>￥{$item['order_amount']}</td>
+            </tr>
+            <tr>
+                <td>收货人</td>
+                <td>{$item['accept_name']}</td>
+            </tr>
+            <tr>
+                <td>固定电话</td>
+                <td>{$item['telphone']}</td>
+            </tr>
+            <tr>
+                <td>手机号码</td>
+                <td>{$item['mobile']}</td>
+            </tr>
+            <tr>
+                <td>收获地址</td>
+                <td>{$this->order_info['province_str']} {$this->order_info['city_str']} {$this->order_info['area_str']} {$this->order_info['address']}</td>
+            </tr>
+            <tr>
+                <td>支付方式</td>
+                <td>{$item['payment']}</td>
+            </tr>
+            <tr>
+                <td>运费</td>
+                <td>{$item['real_freight']}</td>
+            </tr>
+            <tr>
+                <td>物流公司</td>
+                <td>{$item['freight']['freight_name']}</td>
+            </tr>
+            <tr>
+                <td>快递单号</td>
+                <td>{$item['freight']['delivery_code']}</td>
+            </tr>
+            <tr>
+                <td>支付说明</td>
+                <td>{$this->order_info['paynote']}</td>
+            </tr>
+            {if:$item['invoice']==1}
+            <tr>
+                <td>所需税金</td>
+                <td>{$item['taxes']}</td>
+            </tr>
+            <tr>
+                <td>发票抬头</td>
+                <td>{$item['invoice_title']}</td>
+            </tr>
+            {/if}
+        </tbody>
+    </table>
+
+    {set:$order_id=$item['id']}
+    {foreach:items=Api::run('getOrderGoodsListByGoodsid',array('#order_id#',$order_id)) item=$good}
+    {set:$good_info = JSON::decode($good['goods_array'])}
+    <table class="table table-bordered table-hover">
+    	<colgroup>
+			<col width="80px" />
+			<col />
+    	</colgroup>
+        <tbody>
+            <tr>
+                <td>商品</td>
+                <td>
+                    <a href="{url:/site/products/id/$good[goods_id]}"><img src="{webroot:$good[img]}" class="img-responsive" style="width:140px" /></a>
+
+	                {if:$good['delivery_id']}
+	                <p><input type='button' class='btn-primary' value='物流查询' onclick='freightLine({$good['delivery_id']});' /></p>
+	                {/if}
+                </td>
+            </tr>
+            <tr>
+                <td>商品单价</td>
+                <td>￥{$good['real_price']}</td>
+            </tr>
+            <tr>
+                <td>商品数量</td>
+                <td>x {$good['goods_nums']}</td>
+            </tr>
+            <tr>
+                <td>赠送积分</td>
+                <td>{echo:$good['point']*$good['goods_nums']}</td>
+            </tr>
+            <tr>
+                <td>优惠金额</td>
+                <td>￥{echo:$good['goods_price']-$good['real_price']}</td>
+            </tr>
+        </tbody>
+    </table>
+    {/foreach}
+</div>
+</section>
+
+<script type="text/javascript">
+
+//快递跟踪
+function freightLine(doc_id)
+{
+	var urlVal = "{url:/block/freight/id/@id@}";
+	urlVal = urlVal.replace("@id@",doc_id);
+	art.dialog.open(urlVal,{'title':'轨迹查询','width':'80%','height':'80%'});
+}
+
+//修改表单信息
+function editForm()
+{
+	$('#acceptShow').toggle();
+	$('#acceptForm').toggle();
+}
+</script>

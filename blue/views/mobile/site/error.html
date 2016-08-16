@@ -1,0 +1,22 @@
+{set:$msg = IReq::get('msg') ? IReq::get('msg') : '发生错误'}
+<section>
+    <div class="pending-detial">
+        <div class="tips_msg" style="margin-top: 15px;">
+			<img src="{skin:images/front/error.png}" />
+			<p style="font-weight: bold;">{echo:htmlspecialchars($msg,ENT_QUOTES)}</p>
+		</div>
+       <!--  <div class="tips_msg" style="font-weight: bold;">
+            您现在可以去： {if:$this->user['user_id']}
+            <a class="blue" href="{url:/ucenter/index}">个人中心 >></a>&nbsp;&nbsp; &nbsp;&nbsp;{/if}
+            <a class="blue" href="{url:/site/index}">网站首页 >></a>
+        </div> -->
+    </div>
+</section>
+<style type="text/css">
+    .tips_msg {
+    }
+    .blue {
+        padding: 8px 2px;
+        border: 2px solid #ff0000;
+    }
+</style>
